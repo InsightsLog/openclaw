@@ -31,8 +31,8 @@ const AUTH_CHOICE_GROUP_DEFS: {
   {
     value: "anthropic",
     label: "Anthropic",
-    hint: "setup-token + API key",
-    choices: ["token", "apiKey"],
+    hint: "Pro/Max OAuth + setup-token + API key",
+    choices: ["anthropic-pro", "token", "apiKey"],
   },
   {
     value: "chutes",
@@ -163,6 +163,11 @@ const AUTH_CHOICE_GROUP_DEFS: {
 ];
 
 const BASE_AUTH_CHOICE_OPTIONS: ReadonlyArray<AuthChoiceOption> = [
+  {
+    value: "anthropic-pro",
+    label: "Anthropic Pro/Max (OAuth)",
+    hint: "Sign in with your Claude Pro or Max subscription",
+  },
   {
     value: "token",
     label: "Anthropic token (paste setup-token)",

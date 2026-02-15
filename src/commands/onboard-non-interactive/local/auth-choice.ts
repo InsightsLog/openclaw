@@ -724,6 +724,7 @@ export async function applyNonInteractiveAuthChoice(params: {
 
   if (
     authChoice === "oauth" ||
+    authChoice === "anthropic-pro" ||
     authChoice === "chutes" ||
     authChoice === "openai-codex" ||
     authChoice === "qwen-portal" ||

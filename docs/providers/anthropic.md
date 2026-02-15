@@ -1,7 +1,8 @@
 ---
-summary: "Use Anthropic Claude via API keys or setup-token in OpenClaw"
+summary: "Use Anthropic Claude via API keys, Pro/Max OAuth, or setup-token in OpenClaw"
 read_when:
   - You want to use Anthropic models in OpenClaw
+  - You want to use your Claude Pro or Max subscription
   - You want setup-token instead of API keys
 title: "Anthropic"
 ---
@@ -9,7 +10,7 @@ title: "Anthropic"
 # Anthropic (Claude)
 
 Anthropic builds the **Claude** model family and provides access via an API.
-In OpenClaw you can authenticate with an API key or a **setup-token**.
+In OpenClaw you can authenticate with an API key, a **setup-token**, or sign in directly with your **Claude Pro or Max subscription** via OAuth.
 
 ## Option A: Anthropic API key
 
@@ -79,9 +80,28 @@ We recommend migrating to the new `cacheRetention` parameter.
 OpenClaw includes the `extended-cache-ttl-2025-04-11` beta flag for Anthropic API
 requests; keep it if you override provider headers (see [/gateway/configuration](/gateway/configuration)).
 
-## Option B: Claude setup-token
+## Option B: Claude Pro/Max subscription (OAuth)
 
-**Best for:** using your Claude subscription.
+**Best for:** using your Claude Pro or Max subscription without managing API keys.
+
+Sign in directly with your Anthropic account to use your subscription.
+
+### CLI setup (OAuth)
+
+```bash
+openclaw onboard
+# choose: Anthropic → Anthropic Pro/Max (OAuth)
+```
+
+A browser window will open for you to sign in with your Anthropic account. After authenticating, OpenClaw stores an OAuth credential that auto-refreshes.
+
+### Remote/VPS setup
+
+When running on a headless server, OpenClaw shows the authorization URL for you to open in a local browser and paste the code back.
+
+## Option C: Claude setup-token
+
+**Best for:** using your Claude subscription on headless machines where OAuth browser flow is not available.
 
 ### Where to get a setup-token
 
@@ -121,7 +141,7 @@ openclaw onboard --auth-choice setup-token
 ## Notes
 
 - Generate the setup-token with `claude setup-token` and paste it, or run `openclaw models auth setup-token` on the gateway host.
-- If you see “OAuth token refresh failed …” on a Claude subscription, re-auth with a setup-token. See [/gateway/troubleshooting#oauth-token-refresh-failed-anthropic-claude-subscription](/gateway/troubleshooting#oauth-token-refresh-failed-anthropic-claude-subscription).
+- If you see “OAuth token refresh failed …” on a Claude subscription, re-auth with a setup-token or sign in again via OAuth. See [/gateway/troubleshooting#oauth-token-refresh-failed-anthropic-claude-subscription](/gateway/troubleshooting#oauth-token-refresh-failed-anthropic-claude-subscription).
 - Auth details + reuse rules are in [/concepts/oauth](/concepts/oauth).
 
 ## Troubleshooting
@@ -129,7 +149,8 @@ openclaw onboard --auth-choice setup-token
 **401 errors / token suddenly invalid**
 
 - Claude subscription auth can expire or be revoked. Re-run `claude setup-token`
-  and paste it into the **gateway host**.
+  and paste it into the **gateway host**, or sign in again via
+  `openclaw onboard --auth-choice anthropic-pro`.
 - If the Claude CLI login lives on a different machine, use
   `openclaw models auth paste-token --provider anthropic` on the gateway host.
 

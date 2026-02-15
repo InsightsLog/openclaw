@@ -113,7 +113,7 @@ export async function promptAuthConfig(
   }
 
   const anthropicOAuth =
-    authChoice === "setup-token" || authChoice === "token" || authChoice === "oauth";
+    authChoice === "setup-token" || authChoice === "token" || authChoice === "oauth" || authChoice === "anthropic-pro";
 
   if (authChoice !== "custom-api-key") {
     const allowlistSelection = await promptModelAllowlist({

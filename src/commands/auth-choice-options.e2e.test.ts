@@ -26,6 +26,28 @@ describe("buildAuthChoiceOptions", () => {
     expect(options.some((opt) => opt.value === "token")).toBe(true);
   });
 
+  it("includes Anthropic Pro/Max OAuth auth choice", () => {
+    const store: AuthProfileStore = { version: 1, profiles: {} };
+    const options = buildAuthChoiceOptions({
+      store,
+      includeSkip: false,
+    });
+
+    expect(options.some((opt) => opt.value === "anthropic-pro")).toBe(true);
+  });
+
+  it("shows Anthropic Pro/Max in Anthropic group", () => {
+    const store: AuthProfileStore = { version: 1, profiles: {} };
+    const { groups } = buildAuthChoiceGroups({
+      store,
+      includeSkip: false,
+    });
+    const anthropicGroup = groups.find((group) => group.value === "anthropic");
+
+    expect(anthropicGroup).toBeDefined();
+    expect(anthropicGroup?.options.some((opt) => opt.value === "anthropic-pro")).toBe(true);
+  });
+
   it("includes Z.AI (GLM) auth choice", () => {
     const store: AuthProfileStore = { version: 1, profiles: {} };
     const options = buildAuthChoiceOptions({
