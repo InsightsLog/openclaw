@@ -167,6 +167,43 @@ describe("applyAuthChoice", () => {
     ).resolves.toEqual({ config: {} });
   });
 
+  it("does not throw when openai-chatgpt-plus oauth fails", async () => {
+    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-"));
+    process.env.OPENCLAW_STATE_DIR = tempStateDir;
+    process.env.OPENCLAW_AGENT_DIR = path.join(tempStateDir, "agent");
+    process.env.PI_CODING_AGENT_DIR = process.env.OPENCLAW_AGENT_DIR;
+
+    loginOpenAICodexOAuth.mockRejectedValueOnce(new Error("oauth failed"));
+
+    const prompter: WizardPrompter = {
+      intro: vi.fn(noopAsync),
+      outro: vi.fn(noopAsync),
+      note: vi.fn(noopAsync),
+      select: vi.fn(async () => "" as never),
+      multiselect: vi.fn(async () => []),
+      text: vi.fn(async () => ""),
+      confirm: vi.fn(async () => false),
+      progress: vi.fn(() => ({ update: noop, stop: noop })),
+    };
+    const runtime: RuntimeEnv = {
+      log: vi.fn(),
+      error: vi.fn(),
+      exit: vi.fn((code: number) => {
+        throw new Error(`exit:${code}`);
+      }),
+    };
+
+    await expect(
+      applyAuthChoice({
+        authChoice: "openai-chatgpt-plus",
+        config: {},
+        prompter,
+        runtime,
+        setDefaultModel: false,
+      }),
+    ).resolves.toEqual({ config: {} });
+  });
+
   it("prompts and writes MiniMax API key when selecting minimax-api", async () => {
     tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-"));
     process.env.OPENCLAW_STATE_DIR = tempStateDir;
@@ -1453,6 +1490,10 @@ describe("resolvePreferredProviderForAuthChoice", () => {
 
   it("maps anthropic-pro to the anthropic provider", () => {
     expect(resolvePreferredProviderForAuthChoice("anthropic-pro")).toBe("anthropic");
+  });
+
+  it("maps openai-chatgpt-plus to the openai-codex provider", () => {
+    expect(resolvePreferredProviderForAuthChoice("openai-chatgpt-plus")).toBe("openai-codex");
   });
 
   it("returns undefined for unknown choices", () => {
