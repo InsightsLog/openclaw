@@ -26,11 +26,14 @@ For bug fixes and small improvements, you can go straight to opening a PR.
 
 Make sure you have:
 - **Node ≥22** installed
-- Clone the repository: `git clone https://github.com/openclaw/openclaw.git`
+- Fork the repository on GitHub (if you haven't already)
+- Clone **your fork**: `git clone https://github.com/YOUR-USERNAME/openclaw.git`
 - Install dependencies: `pnpm install`
 - Build the project: `pnpm build`
 
 See the [Development Setup](https://docs.openclaw.ai/install/index) for more details.
+
+If you're maintaining a fork with custom changes, see [Syncing Your Fork](https://docs.openclaw.ai/help/syncing-fork) to learn how to keep it up-to-date with upstream.
 
 ## Preparing Your PR
 
@@ -301,6 +304,7 @@ Once approved and all checks pass:
 
 ### Documentation
 - [Contributing Guide](https://github.com/openclaw/openclaw/blob/main/CONTRIBUTING.md)
+- [Syncing Your Fork](https://docs.openclaw.ai/help/syncing-fork) - Keep your fork up-to-date with upstream
 - [Testing Guide](https://docs.openclaw.ai/help/testing)
 - [Development Setup](https://docs.openclaw.ai/install/index)
 
