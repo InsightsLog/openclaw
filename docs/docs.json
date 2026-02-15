@@ -1300,7 +1300,7 @@
               },
               {
                 "group": "Contributing",
-                "pages": ["ci"]
+                "pages": ["help/submitting-a-pr", "help/syncing-fork", "ci"]
               },
               {
                 "group": "Docs meta",

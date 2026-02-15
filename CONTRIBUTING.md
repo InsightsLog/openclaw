@@ -33,9 +33,10 @@ Welcome to the lobster tank! 🦞
 
 ## How to Contribute
 
-1. **Bugs & small fixes** → Open a PR!
+1. **Bugs & small fixes** → Open a PR! See [Submitting a Pull Request](https://docs.openclaw.ai/help/submitting-a-pr) for detailed guidelines.
 2. **New features / architecture** → Start a [GitHub Discussion](https://github.com/openclaw/openclaw/discussions) or ask in Discord first
 3. **Questions** → Discord #setup-help
+4. **Maintaining a fork?** → See [Syncing Your Fork](https://docs.openclaw.ai/help/syncing-fork) to stay up-to-date with upstream
 
 ## Before You PR
 
