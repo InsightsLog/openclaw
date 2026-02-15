@@ -6,11 +6,41 @@ import {
   validateApiKeyInput,
 } from "./auth-choice.api-key.js";
 import { buildTokenProfileId, validateAnthropicSetupToken } from "./auth-token.js";
-import { applyAuthProfileConfig, setAnthropicApiKey } from "./onboard-auth.js";
+import { loginAnthropicProOAuth } from "./anthropic-pro-oauth.js";
+import { isRemoteEnvironment } from "./oauth-env.js";
+import { applyAuthProfileConfig, setAnthropicApiKey, writeOAuthCredentials } from "./onboard-auth.js";
+import { openUrl } from "./onboard-helpers.js";
 
 export async function applyAuthChoiceAnthropic(
   params: ApplyAuthChoiceParams,
 ): Promise<ApplyAuthChoiceResult | null> {
+  if (params.authChoice === "anthropic-pro") {
+    let nextConfig = params.config;
+    try {
+      const creds = await loginAnthropicProOAuth({
+        prompter: params.prompter,
+        runtime: params.runtime,
+        isRemote: isRemoteEnvironment(),
+        openUrl: async (url) => {
+          await openUrl(url);
+        },
+        localBrowserMessage: "Complete sign-in in browser…",
+      });
+      if (creds) {
+        await writeOAuthCredentials("anthropic", creds, params.agentDir);
+        nextConfig = applyAuthProfileConfig(nextConfig, {
+          profileId: "anthropic:default",
+          provider: "anthropic",
+          mode: "oauth",
+        });
+      }
+    } catch {
+      // loginAnthropicProOAuth already surfaces the error to the user.
+      // Keep onboarding flow alive and return unchanged config.
+    }
+    return { config: nextConfig };
+  }
+
   if (
     params.authChoice === "setup-token" ||
     params.authChoice === "oauth" ||

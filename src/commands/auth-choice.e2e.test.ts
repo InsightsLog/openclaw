@@ -21,6 +21,11 @@ vi.mock("./openai-codex-oauth.js", () => ({
   loginOpenAICodexOAuth,
 }));
 
+const loginAnthropicProOAuth = vi.hoisted(() => vi.fn(async () => null));
+vi.mock("./anthropic-pro-oauth.js", () => ({
+  loginAnthropicProOAuth,
+}));
+
 const resolvePluginProviders = vi.hoisted(() => vi.fn(() => []));
 vi.mock("../plugins/providers.js", () => ({
   resolvePluginProviders,
@@ -57,6 +62,8 @@ describe("applyAuthChoice", () => {
     resolvePluginProviders.mockReset();
     loginOpenAICodexOAuth.mockReset();
     loginOpenAICodexOAuth.mockResolvedValue(null);
+    loginAnthropicProOAuth.mockReset();
+    loginAnthropicProOAuth.mockResolvedValue(null);
     if (tempStateDir) {
       await fs.rm(tempStateDir, { recursive: true, force: true });
       tempStateDir = null;
@@ -1352,6 +1359,87 @@ describe("applyAuthChoice", () => {
       refresh: "refresh",
     });
   });
+
+  it("does not throw when anthropic-pro oauth fails", async () => {
+    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-"));
+    process.env.OPENCLAW_STATE_DIR = tempStateDir;
+    process.env.OPENCLAW_AGENT_DIR = path.join(tempStateDir, "agent");
+    process.env.PI_CODING_AGENT_DIR = process.env.OPENCLAW_AGENT_DIR;
+
+    loginAnthropicProOAuth.mockRejectedValueOnce(new Error("oauth failed"));
+
+    const prompter: WizardPrompter = {
+      intro: vi.fn(noopAsync),
+      outro: vi.fn(noopAsync),
+      note: vi.fn(noopAsync),
+      select: vi.fn(async () => "" as never),
+      multiselect: vi.fn(async () => []),
+      text: vi.fn(async () => ""),
+      confirm: vi.fn(async () => false),
+      progress: vi.fn(() => ({ update: noop, stop: noop })),
+    };
+    const runtime: RuntimeEnv = {
+      log: vi.fn(),
+      error: vi.fn(),
+      exit: vi.fn((code: number) => {
+        throw new Error(`exit:${code}`);
+      }),
+    };
+
+    await expect(
+      applyAuthChoice({
+        authChoice: "anthropic-pro",
+        config: {},
+        prompter,
+        runtime,
+        setDefaultModel: false,
+      }),
+    ).resolves.toEqual({ config: {} });
+  });
+
+  it("writes Anthropic OAuth credentials when selecting anthropic-pro", async () => {
+    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-"));
+    process.env.OPENCLAW_STATE_DIR = tempStateDir;
+    process.env.OPENCLAW_AGENT_DIR = path.join(tempStateDir, "agent");
+    process.env.PI_CODING_AGENT_DIR = process.env.OPENCLAW_AGENT_DIR;
+
+    loginAnthropicProOAuth.mockResolvedValueOnce({
+      access: "access-token",
+      refresh: "refresh-token",
+      expires: Date.now() + 3600000,
+    });
+
+    const prompter: WizardPrompter = {
+      intro: vi.fn(noopAsync),
+      outro: vi.fn(noopAsync),
+      note: vi.fn(noopAsync),
+      select: vi.fn(async () => "" as never),
+      multiselect: vi.fn(async () => []),
+      text: vi.fn(async () => ""),
+      confirm: vi.fn(async () => false),
+      progress: vi.fn(() => ({ update: noop, stop: noop })),
+    };
+    const runtime: RuntimeEnv = {
+      log: vi.fn(),
+      error: vi.fn(),
+      exit: vi.fn((code: number) => {
+        throw new Error(`exit:${code}`);
+      }),
+    };
+
+    const result = await applyAuthChoice({
+      authChoice: "anthropic-pro",
+      config: {},
+      prompter,
+      runtime,
+      setDefaultModel: false,
+    });
+
+    expect(result.config.auth?.profiles?.["anthropic:default"]).toEqual({
+      provider: "anthropic",
+      mode: "oauth",
+    });
+  });
 });
 
 describe("resolvePreferredProviderForAuthChoice", () => {
@@ -1361,6 +1449,10 @@ describe("resolvePreferredProviderForAuthChoice", () => {
 
   it("maps qwen-portal to the provider", () => {
     expect(resolvePreferredProviderForAuthChoice("qwen-portal")).toBe("qwen-portal");
+  });
+
+  it("maps anthropic-pro to the anthropic provider", () => {
+    expect(resolvePreferredProviderForAuthChoice("anthropic-pro")).toBe("anthropic");
   });
 
   it("returns undefined for unknown choices", () => {

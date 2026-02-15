@@ -8,6 +8,7 @@ export type AuthChoice =
   | "setup-token"
   | "claude-cli"
   | "token"
+  | "anthropic-pro"
   | "chutes"
   | "vllm"
   | "openai-codex"
