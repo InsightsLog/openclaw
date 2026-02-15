@@ -18,14 +18,16 @@ export async function applyAuthChoiceAnthropic(
   ) {
     let nextConfig = params.config;
     await params.prompter.note(
-      ["Run `claude setup-token` in your terminal.", "Then paste the generated token below."].join(
-        "\n",
-      ),
-      "Anthropic setup-token",
+      [
+        "For Claude Pro/Max subscriptions, generate a setup-token:",
+        "Run `claude setup-token` in your terminal.",
+        "Then paste the generated token below.",
+      ].join("\n"),
+      "Anthropic Pro/Max Subscription",
     );
 
     const tokenRaw = await params.prompter.text({
-      message: "Paste Anthropic setup-token",
+      message: "Paste Anthropic setup-token (from Claude Pro/Max subscription)",
       validate: (value) => validateAnthropicSetupToken(String(value ?? "")),
     });
     const token = String(tokenRaw ?? "").trim();

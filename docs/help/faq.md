@@ -676,17 +676,34 @@ Docs: [Anthropic](/providers/anthropic), [OpenAI](/providers/openai),
 
 ### Can I use Claude Max subscription without an API key
 
-Yes. You can authenticate with a **setup-token**
-instead of an API key. This is the subscription path.
+Yes. **OpenClaw fully supports Claude Pro and Max subscriptions** through setup-tokens.
+Claude Pro/Max subscriptions do **not include a separate API key**, but you can authenticate
+using the `claude setup-token` command.
 
-Claude Pro/Max subscriptions **do not include an API key**, so this is the
-correct approach for subscription accounts. Important: you must verify with
-Anthropic that this usage is allowed under their subscription policy and terms.
-If you want the most explicit, supported path, use an Anthropic API key.
+During onboarding, select **"Anthropic Pro/Max subscription (setup-token)"**, or run:
+
+```bash
+openclaw onboard --auth-choice setup-token
+```
+
+This is the **recommended approach** for Claude Pro/Max subscribers, as it allows you to use
+your existing subscription instead of paying additional API costs.
 
 ### How does Anthropic setuptoken auth work
 
-`claude setup-token` generates a **token string** via the Claude Code CLI (it is not available in the web console). You can run it on **any machine**. Choose **Anthropic token (paste setup-token)** in the wizard or paste it with `openclaw models auth paste-token --provider anthropic`. The token is stored as an auth profile for the **anthropic** provider and used like an API key (no auto-refresh). More detail: [OAuth](/concepts/oauth).
+`claude setup-token` generates a **token string** via the Claude Code CLI that authenticates
+using your Claude Pro/Max subscription. The token is **not available in the web console** - it
+must be generated through the CLI.
+
+You can run `claude setup-token` on **any machine**, then paste the token into OpenClaw during
+onboarding (select **"Anthropic Pro/Max subscription (setup-token)"**) or use:
+
+```bash
+openclaw models auth paste-token --provider anthropic
+```
+
+The token is stored as an auth profile and uses your subscription's quota and rate limits.
+More details: [Anthropic](/providers/anthropic) and [OAuth](/concepts/oauth).
 
 ### Where do I find an Anthropic setuptoken
 
@@ -700,9 +717,19 @@ Copy the token it prints, then choose **Anthropic token (paste setup-token)** in
 
 ### Do you support Claude subscription auth (Claude Pro or Max)
 
-Yes - via **setup-token**. OpenClaw no longer reuses Claude Code CLI OAuth tokens; use a setup-token or an Anthropic API key. Generate the token anywhere and paste it on the gateway host. See [Anthropic](/providers/anthropic) and [OAuth](/concepts/oauth).
+**Yes - OpenClaw fully supports Claude Pro and Max subscriptions via setup-token.**
 
-Note: Claude subscription access is governed by Anthropic's terms. For production or multi-user workloads, API keys are usually the safer choice.
+Setup-tokens allow you to use your Claude Pro/Max subscription with OpenClaw without
+needing a separate API key. To set up:
+
+1. Run `claude setup-token` on any machine with the Claude Code CLI
+2. During OpenClaw onboarding, select **"Anthropic Pro/Max subscription (setup-token)"**
+3. Paste the token when prompted
+
+The setup-token automatically uses your subscription tier (Pro or Max) and quota.
+See [Anthropic](/providers/anthropic) and [OAuth](/concepts/oauth) for more details.
+
+**Note:** For production or multi-user workloads, Anthropic API keys may be more appropriate.
 
 ### Why am I seeing HTTP 429 ratelimiterror from Anthropic
 

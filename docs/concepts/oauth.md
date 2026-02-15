@@ -49,9 +49,11 @@ Legacy import-only file (still supported, but not the main store):
 
 All of the above also respect `$OPENCLAW_STATE_DIR` (state dir override). Full reference: [/gateway/configuration](/gateway/configuration#auth-storage-oauth--api-keys)
 
-## Anthropic setup-token (subscription auth)
+## Anthropic Pro/Max subscription (setup-token)
 
-Run `claude setup-token` on any machine, then paste it into OpenClaw:
+**OpenClaw fully supports Claude Pro and Max subscriptions** through setup-tokens.
+
+Run `claude setup-token` on any machine with the Claude Code CLI, then paste it into OpenClaw:
 
 ```bash
 openclaw models auth setup-token --provider anthropic
@@ -63,11 +65,16 @@ If you generated the token elsewhere, paste it manually:
 openclaw models auth paste-token --provider anthropic
 ```
 
-Verify:
+Or during onboarding, select **"Anthropic Pro/Max subscription (setup-token)"**.
+
+Verify your authentication:
 
 ```bash
 openclaw models status
 ```
+
+The setup-token automatically uses your subscription tier (Pro or Max) and inherits the
+subscription's rate limits and quotas.
 
 ## OAuth exchange (how login works)
 
@@ -77,11 +84,13 @@ OpenClaw’s interactive login flows are implemented in `@mariozechner/pi-ai` an
 
 Flow shape:
 
-1. run `claude setup-token`
-2. paste the token into OpenClaw
-3. store as a token auth profile (no refresh)
+1. run `claude setup-token` with an authenticated Claude Code CLI
+2. paste the token into OpenClaw (select "Anthropic Pro/Max subscription")
+3. store as a token auth profile (no refresh needed)
 
-The wizard path is `openclaw onboard` → auth choice `setup-token` (Anthropic).
+The wizard path is `openclaw onboard` → auth choice `setup-token` (Anthropic Pro/Max subscription).
+
+This method uses your Claude Pro or Max subscription and inherits its rate limits and quota.
 
 ### OpenAI Codex (ChatGPT OAuth)
 
