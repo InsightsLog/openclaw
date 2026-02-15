@@ -31,7 +31,7 @@ const AUTH_CHOICE_GROUP_DEFS: {
   {
     value: "anthropic",
     label: "Anthropic",
-    hint: "setup-token + API key",
+    hint: "Pro/Max subscription or API key",
     choices: ["token", "apiKey"],
   },
   {
@@ -165,8 +165,8 @@ const AUTH_CHOICE_GROUP_DEFS: {
 const BASE_AUTH_CHOICE_OPTIONS: ReadonlyArray<AuthChoiceOption> = [
   {
     value: "token",
-    label: "Anthropic token (paste setup-token)",
-    hint: "run `claude setup-token` elsewhere, then paste the token here",
+    label: "Anthropic Pro/Max subscription (setup-token)",
+    hint: "For Claude Pro/Max subscriptions: run `claude setup-token`, then paste here",
   },
   {
     value: "openai-codex",

@@ -79,9 +79,11 @@ We recommend migrating to the new `cacheRetention` parameter.
 OpenClaw includes the `extended-cache-ttl-2025-04-11` beta flag for Anthropic API
 requests; keep it if you override provider headers (see [/gateway/configuration](/gateway/configuration)).
 
-## Option B: Claude setup-token
+## Option B: Claude Pro/Max subscription (setup-token)
 
-**Best for:** using your Claude subscription.
+**Best for:** using your Claude Pro or Max subscription instead of paying per-token API costs.
+
+Claude Pro/Max subscriptions include access to Claude models through the Claude Code CLI. OpenClaw can use this subscription access via setup-tokens.
 
 ### Where to get a setup-token
 
@@ -103,20 +105,28 @@ If you generated the token on a different machine, paste it:
 openclaw models auth paste-token --provider anthropic
 ```
 
-### CLI setup (setup-token)
+### CLI setup (Pro/Max subscription)
 
 ```bash
-# Paste a setup-token during onboarding
+# Use Claude Pro/Max subscription during onboarding
 openclaw onboard --auth-choice setup-token
+
+# Or paste a setup-token during interactive onboarding
+openclaw onboard
+# choose: Anthropic Pro/Max subscription (setup-token)
 ```
 
-### Config snippet (setup-token)
+### Config snippet (Pro/Max subscription)
+
+When using a Claude Pro/Max subscription via setup-token, you don't need to specify any API key in the config:
 
 ```json5
 {
   agents: { defaults: { model: { primary: "anthropic/claude-opus-4-6" } } },
 }
 ```
+
+The setup-token is stored securely in `~/.openclaw/agents/<agentId>/agent/auth-profiles.json`.
 
 ## Notes
 

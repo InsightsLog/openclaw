@@ -26,6 +26,18 @@ describe("buildAuthChoiceOptions", () => {
     expect(options.some((opt) => opt.value === "token")).toBe(true);
   });
 
+  it("labels token option as Pro/Max subscription", () => {
+    const store: AuthProfileStore = { version: 1, profiles: {} };
+    const options = buildAuthChoiceOptions({
+      store,
+      includeSkip: false,
+    });
+
+    const tokenOption = options.find((opt) => opt.value === "token");
+    expect(tokenOption?.label).toContain("Pro/Max");
+    expect(tokenOption?.hint).toContain("Claude Pro/Max");
+  });
+
   it("includes Z.AI (GLM) auth choice", () => {
     const store: AuthProfileStore = { version: 1, profiles: {} };
     const options = buildAuthChoiceOptions({
@@ -188,5 +200,17 @@ describe("buildAuthChoiceOptions", () => {
 
     expect(chutesGroup).toBeDefined();
     expect(chutesGroup?.options.some((opt) => opt.value === "chutes")).toBe(true);
+  });
+
+  it("labels Anthropic group as Pro/Max subscription or API key", () => {
+    const store: AuthProfileStore = { version: 1, profiles: {} };
+    const { groups } = buildAuthChoiceGroups({
+      store,
+      includeSkip: false,
+    });
+    const anthropicGroup = groups.find((group) => group.value === "anthropic");
+
+    expect(anthropicGroup).toBeDefined();
+    expect(anthropicGroup?.hint).toContain("Pro/Max");
   });
 });
