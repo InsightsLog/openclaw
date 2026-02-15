@@ -103,7 +103,7 @@ export async function applyAuthChoiceOpenAI(
     return await applyOpenAiDefaultModelChoice();
   }
 
-  if (params.authChoice === "openai-codex") {
+  if (params.authChoice === "openai-codex" || params.authChoice === "openai-chatgpt-plus") {
     let nextConfig = params.config;
     let agentModelOverride: string | undefined;
     const noteAgentModel = async (model: string) => {

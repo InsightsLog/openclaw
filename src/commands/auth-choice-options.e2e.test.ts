@@ -200,6 +200,28 @@ describe("buildAuthChoiceOptions", () => {
     expect(cliChoices).toContain("codex-cli");
   });
 
+  it("includes ChatGPT Plus/Pro OAuth auth choice", () => {
+    const store: AuthProfileStore = { version: 1, profiles: {} };
+    const options = buildAuthChoiceOptions({
+      store,
+      includeSkip: false,
+    });
+
+    expect(options.some((opt) => opt.value === "openai-chatgpt-plus")).toBe(true);
+  });
+
+  it("shows ChatGPT Plus/Pro in OpenAI group", () => {
+    const store: AuthProfileStore = { version: 1, profiles: {} };
+    const { groups } = buildAuthChoiceGroups({
+      store,
+      includeSkip: false,
+    });
+    const openaiGroup = groups.find((group) => group.value === "openai");
+
+    expect(openaiGroup).toBeDefined();
+    expect(openaiGroup?.options.some((opt) => opt.value === "openai-chatgpt-plus")).toBe(true);
+  });
+
   it("shows Chutes in grouped provider selection", () => {
     const store: AuthProfileStore = { version: 1, profiles: {} };
     const { groups } = buildAuthChoiceGroups({

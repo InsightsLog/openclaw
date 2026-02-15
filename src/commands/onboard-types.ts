@@ -12,6 +12,7 @@ export type AuthChoice =
   | "chutes"
   | "vllm"
   | "openai-codex"
+  | "openai-chatgpt-plus"
   | "openai-api-key"
   | "openrouter-api-key"
   | "litellm-api-key"

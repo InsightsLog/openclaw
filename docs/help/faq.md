@@ -42,6 +42,7 @@ Quick answers plus deeper troubleshooting for real-world setups (local dev, VPS,
   - [Is AWS Bedrock supported?](#is-aws-bedrock-supported)
   - [How does Codex auth work?](#how-does-codex-auth-work)
   - [Do you support OpenAI subscription auth (Codex OAuth)?](#do-you-support-openai-subscription-auth-codex-oauth)
+  - [Can I use my ChatGPT Plus or Pro subscription?](#can-i-use-my-chatgpt-plus-or-pro-subscription)
   - [How do I set up Gemini CLI OAuth](#how-do-i-set-up-gemini-cli-oauth)
   - [Is a local model OK for casual chats?](#is-a-local-model-ok-for-casual-chats)
   - [How do I keep hosted model traffic in a specific region?](#how-do-i-keep-hosted-model-traffic-in-a-specific-region)
@@ -656,7 +657,7 @@ Docs: [Update](/cli/update), [Updating](/install/updating).
 
 `openclaw onboard` is the recommended setup path. In **local mode** it walks you through:
 
-- **Model/auth setup** (Anthropic **setup-token** recommended for Claude subscriptions, OpenAI Codex OAuth supported, API keys optional, LM Studio local models supported)
+- **Model/auth setup** (Anthropic **setup-token** recommended for Claude subscriptions, OpenAI ChatGPT Plus/Pro and Codex OAuth supported, API keys optional, LM Studio local models supported)
 - **Workspace** location + bootstrap files
 - **Gateway settings** (bind/port/auth/tailscale)
 - **Providers** (WhatsApp, Telegram, Discord, Mattermost (plugin), Signal, iMessage)
@@ -669,7 +670,7 @@ It also warns if your configured model is unknown or missing auth.
 
 No. You can run OpenClaw with **API keys** (Anthropic/OpenAI/others) or with
 **local-only models** so your data stays on your device. Subscriptions (Claude
-Pro/Max or OpenAI Codex) are optional ways to authenticate those providers.
+Pro/Max, ChatGPT Plus/Pro, or OpenAI Codex) are optional ways to authenticate those providers.
 
 Docs: [Anthropic](/providers/anthropic), [OpenAI](/providers/openai),
 [Local models](/gateway/local-models), [Models](/concepts/models).
@@ -728,6 +729,15 @@ Yes. OpenClaw fully supports **OpenAI Code (Codex) subscription OAuth**. The onb
 can run the OAuth flow for you.
 
 See [OAuth](/concepts/oauth), [Model providers](/concepts/model-providers), and [Wizard](/start/wizard).
+
+### Can I use my ChatGPT Plus or Pro subscription
+
+Yes. OpenClaw fully supports **ChatGPT Plus/Pro subscription OAuth**. Run
+`openclaw onboard --auth-choice openai-chatgpt-plus` or choose **ChatGPT Plus/Pro (OAuth)** in the
+onboarding wizard. This uses the same OAuth flow as Codex and sets the default model to
+`openai-codex/gpt-5.3-codex`.
+
+See [OpenAI](/providers/openai), [OAuth](/concepts/oauth), and [Wizard](/start/wizard).
 
 ### How do I set up Gemini CLI OAuth
 

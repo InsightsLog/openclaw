@@ -25,8 +25,8 @@ const AUTH_CHOICE_GROUP_DEFS: {
   {
     value: "openai",
     label: "OpenAI",
-    hint: "Codex OAuth + API key",
-    choices: ["openai-codex", "openai-api-key"],
+    hint: "ChatGPT Plus/Pro OAuth + Codex OAuth + API key",
+    choices: ["openai-chatgpt-plus", "openai-codex", "openai-api-key"],
   },
   {
     value: "anthropic",
@@ -172,6 +172,11 @@ const BASE_AUTH_CHOICE_OPTIONS: ReadonlyArray<AuthChoiceOption> = [
     value: "token",
     label: "Anthropic token (paste setup-token)",
     hint: "run `claude setup-token` elsewhere, then paste the token here",
+  },
+  {
+    value: "openai-chatgpt-plus",
+    label: "ChatGPT Plus/Pro (OAuth)",
+    hint: "Sign in with your ChatGPT Plus or Pro subscription",
   },
   {
     value: "openai-codex",
