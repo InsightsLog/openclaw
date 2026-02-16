@@ -827,7 +827,7 @@
               },
               {
                 "group": "Guides",
-                "pages": ["start/openclaw"]
+                "pages": ["start/openclaw", "guides/multi-provider-agents"]
               }
             ]
           },
@@ -944,7 +944,7 @@
               },
               {
                 "group": "Multi-agent",
-                "pages": ["concepts/multi-agent", "concepts/presence"]
+                "pages": ["concepts/multi-agent", "concepts/presence", "guides/multi-provider-agents"]
               },
               {
                 "group": "Messages and delivery",
@@ -1052,6 +1052,8 @@
                 "pages": [
                   "providers/anthropic",
                   "providers/openai",
+                  "providers/google",
+                  "providers/github-copilot",
                   "providers/openrouter",
                   "providers/litellm",
                   "providers/bedrock",

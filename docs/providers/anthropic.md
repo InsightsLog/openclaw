@@ -143,7 +143,8 @@ openclaw onboard --auth-choice setup-token
 - Generate the setup-token with `claude setup-token` and paste it, or run `openclaw models auth setup-token` on the gateway host.
 - If you see “OAuth token refresh failed …” on a Claude subscription, re-auth with a setup-token or sign in again via OAuth. See [/gateway/troubleshooting#oauth-token-refresh-failed-anthropic-claude-subscription](/gateway/troubleshooting#oauth-token-refresh-failed-anthropic-claude-subscription).
 - Auth details + reuse rules are in [/concepts/oauth](/concepts/oauth).
-
+- For multi-agent setups combining Anthropic with other providers, see
+  [Multi-Provider Agents](/guides/multi-provider-agents).
 ## Troubleshooting
 
 **401 errors / token suddenly invalid**
